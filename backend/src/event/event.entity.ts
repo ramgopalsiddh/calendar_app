@@ -17,4 +17,7 @@ export class Event {
 
   @Column()
   time: string;  // Store time as string (e.g., HH:mm)
+
+  @Column({ default: false })
+  done: boolean;  // Add 'done' column to track the event's status
 }
