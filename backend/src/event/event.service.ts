@@ -1,4 +1,3 @@
-// src/event/event.service.ts
 import { Injectable } from '@nestjs/common';
 import { Event } from './event.entity';
 
@@ -50,6 +49,31 @@ export class EventService {
     event.done = done;
     console.log(`Event updated: ${JSON.stringify(event)}`);
     return event;
+  }
+
+  // Update an existing event
+  updateEvent(id: number, updatedEvent: { title: string; description: string; date: string; time: string }): Event {
+    const event = this.events.find(event => event.id === id);
+    if (!event) {
+      throw new Error('Event not found');
+    }
+    
+    event.title = updatedEvent.title;
+    event.description = updatedEvent.description;
+    event.date = new Date(updatedEvent.date).toISOString().split('T')[0];
+    event.time = new Date(`1970-01-01T${updatedEvent.time}Z`).toISOString().split('T')[1].slice(0, 5);
+    
+    return event;
+  }
+
+  // Delete an event
+  deleteEvent(id: number): void {
+    const eventIndex = this.events.findIndex(event => event.id === id);
+    if (eventIndex === -1) {
+      throw new Error('Event not found');
+    }
+
+    this.events.splice(eventIndex, 1);
   }
   
 
